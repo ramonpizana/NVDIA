@@ -8,10 +8,11 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.19
         uses: actions/setup-go@v5
@@ -20,14 +21,15 @@ jobs:
 
       - name: Check out source code
         uses: actions/checkout@v4
-      
+
       - name: Test
         run: go test ./...
+
   notify:
     name: Search and notify
     needs: test
     if: github.event_name != 'pull_request'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.19
         uses: actions/setup-go@v5
