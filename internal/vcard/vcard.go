@@ -1,13 +1,17 @@
 package vcard
 
 type Vcard struct {
-	Price int
+	Name  string
+	Store string
+	Price int // Mexican pesos (MXN), including the price shown by the retailer.
 	Link  string
 	Stock bool
 }
 
-func New(price int, link string, stock bool) *Vcard {
+func New(name, store string, price int, link string, stock bool) *Vcard {
 	return &Vcard{
+		Name:  name,
+		Store: store,
 		Price: price,
 		Link:  link,
 		Stock: stock,

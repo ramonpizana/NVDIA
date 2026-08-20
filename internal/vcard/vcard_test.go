@@ -4,14 +4,16 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/brodiep21/4090/internal/vcard"
+	"github.com/ramonpizana/NVDIA/internal/vcard"
 )
 
 func TestVcard(t *testing.T) {
 	t.Run("add a vcard", func(t *testing.T) {
-		got := vcard.New(1500, "some link", false)
+		got := vcard.New("RTX 5090", "Tienda", 1500, "some link", false)
 
 		want := &vcard.Vcard{
+			Name:  "RTX 5090",
+			Store: "Tienda",
 			Price: 1500,
 			Link:  "some link",
 			Stock: false,
@@ -23,15 +25,19 @@ func TestVcard(t *testing.T) {
 
 	})
 	t.Run("add 2 cards", func(t *testing.T) {
-		got := vcard.New(1500, "some link", false)
-		got2 := vcard.New(1700, "another link", true)
+		got := vcard.New("RTX 5090", "Tienda", 1500, "some link", false)
+		got2 := vcard.New("RTX 5090 OC", "Otra tienda", 1700, "another link", true)
 
 		want := &vcard.Vcard{
+			Name:  "RTX 5090",
+			Store: "Tienda",
 			Price: 1500,
 			Link:  "some link",
 			Stock: false,
 		}
 		want2 := &vcard.Vcard{
+			Name:  "RTX 5090 OC",
+			Store: "Otra tienda",
 			Price: 1700,
 			Link:  "another link",
 			Stock: true,

@@ -11,7 +11,11 @@ import (
 
 func main() {
 
-	pass := os.Getenv("PSWRD")
+	pass := os.Getenv("SMTP_PASSWORD")
+	if pass == "" {
+		// Compatibility with the previous setup. Prefer SMTP_PASSWORD going forward.
+		pass = os.Getenv("PSWRD")
+	}
 
 	err := search.SearchNewEgg(pass)
 	if err != nil {

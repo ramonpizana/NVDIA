@@ -1,28 +1,51 @@
 name: cron job
 
 on:
-  #Triggers workflow every minute
+  # Runs every eight hours.
   schedule:
-  - cron: "0 0/8 * * *"
-env:
-  # Setting an environment variable with the value of a configuration variable
-  PSWRD: ${{ secrets.PSWRD }}
+    - cron: "0 */8 * * *"
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
 jobs:
- build:
-    name: Build
-    runs-on: ubuntu-20.04
+  test:
+    name: Test
+    runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.19
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: 1.19
 
       - name: Check out source code
-        uses: actions/checkout@v3
-      
-      - name: Install dependencies
-        run: go mod tidy
-      - name: Build
-        run: go build ./...
-      - name: shcmd
-        run: go run ./...
+        uses: actions/checkout@v4
+
+      - name: Test
+        run: go test ./...
+
+  notify:
+    name: Search and notify
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.19
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.19
+
+      - name: Check out source code
+        uses: actions/checkout@v4
+
+      - name: Search and notify
+        run: go run ./cmd
+        env:
+          MAX_PRICE_MXN: ${{ vars.MAX_PRICE_MXN || '80000' }}
+          SMTP_HOST: ${{ vars.SMTP_HOST || 'smtp.gmail.com' }}
+          SMTP_PORT: ${{ vars.SMTP_PORT || '587' }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
