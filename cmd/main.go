@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/brodiep21/4090/search"
+	"github.com/ramonpizana/NVDIA/search"
 	// "github.com/gocolly/colly"
 	// "net/smtp"
 )
