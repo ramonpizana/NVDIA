@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/brodiep21/4090/internal/vcard"
+	"github.com/ramonpizana/NVDIA/internal/vcard"
 	"gopkg.in/mail.v2"
 )
 
@@ -22,13 +22,13 @@ func MailInfo(pass string, information []*vcard.Vcard) error {
 	}
 	m := mail.NewMessage()
 
-	m.SetHeader("From", "bpeif21@gmail.com")
-	m.SetHeader("To", "brodiep21@hotmail.com")
+	m.SetHeader("From", "ramonpizana@hotmail.com")
+	m.SetHeader("To", "ramonpizana123gmail.com")
 	m.SetHeader("Subject", "Found cards!")
 
 	m.SetBody("text/html", strings.Join(s[:], "\n"))
 	//verify stmp env var via gpass
-	d := mail.NewDialer("smtp.gmail.com", 587, "bpeif21@gmail.com", pass)
+	d := mail.NewDialer("smtp.gmail.com", 587, "ramonpizana123gmail.com", pass)
 	if err := d.DialAndSend(m); err != nil {
 		return err
 	}
