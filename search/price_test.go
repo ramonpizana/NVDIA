@@ -41,4 +41,13 @@ func Test_priceConversion(t *testing.T) {
 			t.Error(err)
 		}
 	})
+	t.Run("Drops cents from a Mexican peso price", func(t *testing.T) {
+		got, err := search.PriceConversion("$81,379.00")
+		if err != nil {
+			t.Error(err)
+		}
+		if got != 81379 {
+			t.Errorf("Got %d, want %d", got, 81379)
+		}
+	})
 }

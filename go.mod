@@ -1,4 +1,4 @@
-module github.com/brodiep21/4090
+module github.com/ramonpizana/NVDIA
 
 go 1.19
 
