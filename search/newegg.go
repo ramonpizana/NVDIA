@@ -3,8 +3,8 @@ package search
 import (
 	"fmt"
 
-	"github.com/brodiep21/4090/internal"
-	"github.com/brodiep21/4090/internal/vcard"
+	"github.com/ramonpizana/NVDIA/internal"
+	"github.com/ramonpizana/NVDIA/internal/vcard"
 	"github.com/gocolly/colly"
 )
 
