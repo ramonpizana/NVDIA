@@ -3,7 +3,7 @@ package search_test
 import (
 	"testing"
 
-	"github.com/brodiep21/4090/search"
+	"github.com/ramonpizana/NVDIA/search"
 )
 
 func Test_priceConversion(t *testing.T) {
