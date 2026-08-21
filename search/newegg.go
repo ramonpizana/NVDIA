@@ -159,6 +159,7 @@ func parseStoreDocument(document *goquery.Document, baseURL *url.URL, s store) s
 }
 
 func isInStock(listingText string) bool {
+	listingText = strings.ToLower(listingText)
 	for _, unavailable := range []string{
 		"sin stock", "sin existencia", "sin piezas", "agotado", "out of stock", "no disponible", "crear alerta",
 	} {
