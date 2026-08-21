@@ -11,10 +11,21 @@ import (
 	"gopkg.in/mail.v2"
 )
 
-// mails over information
+// MailInfo emails the available cards sorted by price.
 func MailInfo(pass string, information []*vcard.Vcard) error {
-	s := make([]string, 0)
+	lines := make([]string, 0, len(information))
+	for _, card := range information {
+		lines = append(lines, fmt.Sprintf("%s — %s — $%s MXN\n%s", card.Store, card.Name, strconv.Itoa(card.Price), card.Link))
+	}
+	return sendMail(pass, "RTX 5090 disponibles en México", strings.Join(lines, "\n\n"))
+}
 
+// MailTest validates SMTP independently from retailer availability.
+func MailTest(pass string) error {
+	return sendMail(pass, "Prueba del monitor RTX 5090", "La configuración SMTP funciona correctamente. Las alertas de disponibilidad llegarán a este correo.")
+}
+
+func sendMail(pass, subject, body string) error {
 	if pass == "" {
 		return errors.New("SMTP_PASSWORD is not configured")
 	}
@@ -24,20 +35,16 @@ func MailInfo(pass string, information []*vcard.Vcard) error {
 	if from == "" || to == "" || username == "" {
 		return errors.New("EMAIL_FROM, EMAIL_TO and SMTP_USERNAME must be configured")
 	}
-	for i := 0; i < len(information); i++ {
-		s = append(s, fmt.Sprintf("%s — %s — $%s MXN\n%s\n", information[i].Store, information[i].Name, strconv.Itoa(information[i].Price), information[i].Link))
-	}
-	m := mail.NewMessage()
 
-	m.SetHeader("From", from)
-	m.SetHeader("To", to)
-	m.SetHeader("Subject", "RTX 5090 disponibles en México")
+	message := mail.NewMessage()
+	message.SetHeader("From", from)
+	message.SetHeader("To", to)
+	message.SetHeader("Subject", subject)
+	message.SetBody("text/plain", body)
 
-	m.SetBody("text/html", strings.Join(s[:], "\n"))
-	//verify stmp env var via gpass
-	d := mail.NewDialer(envOrDefault("SMTP_HOST", "smtp.gmail.com"), envIntOrDefault("SMTP_PORT", 587), username, pass)
-	if err := d.DialAndSend(m); err != nil {
-		return err
+	dialer := mail.NewDialer(envOrDefault("SMTP_HOST", "smtp.gmail.com"), envIntOrDefault("SMTP_PORT", 587), username, pass)
+	if err := dialer.DialAndSend(message); err != nil {
+		return fmt.Errorf("SMTP: %w", err)
 	}
 	return nil
 }

@@ -3,12 +3,11 @@ module github.com/ramonpizana/NVDIA
 go 1.19
 
 require (
-	github.com/gocolly/colly v1.2.0
+	github.com/PuerkitoBio/goquery v1.8.0
 	gopkg.in/mail.v2 v2.3.1
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/antchfx/htmlquery v1.2.6 // indirect
 	github.com/antchfx/xmlquery v1.3.14 // indirect
