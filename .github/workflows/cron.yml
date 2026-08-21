@@ -33,6 +33,12 @@ jobs:
       - name: Test
         run: go test ./...
 
+      - name: Check retailer integrations
+        run: go run ./cmd
+        env:
+          DRY_RUN: "true"
+          MAX_PRICE_MXN: "80000"
+
   notify:
     name: Search and notify
     needs: test

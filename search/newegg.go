@@ -64,6 +64,10 @@ func SearchNewEgg(pass string) error {
 	if len(filtered) == 0 {
 		return nil
 	}
+	if envBool("DRY_RUN") {
+		fmt.Println("modo diagnóstico: no se enviará correo")
+		return nil
+	}
 	return internal.MailInfo(pass, filtered)
 }
 
@@ -175,6 +179,11 @@ func maxPriceMXN() int {
 		return value
 	}
 	return defaultMaxPriceMXN
+}
+
+func envBool(key string) bool {
+	enabled, err := strconv.ParseBool(os.Getenv(key))
+	return err == nil && enabled
 }
 
 func check(cards []*vcard.Vcard, maxPrice int) []*vcard.Vcard {
