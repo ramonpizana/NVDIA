@@ -1,26 +1,34 @@
-name: cron job
+name: RTX 5090 monitor
 
 on:
-  # Runs every eight hours.
   schedule:
     - cron: "0 */8 * * *"
   workflow_dispatch:
+    inputs:
+      send_test_email:
+        description: Send an SMTP test email without checking stores
+        required: false
+        default: false
+        type: boolean
   pull_request:
     branches:
       - main
+
+permissions:
+  contents: read
 
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.19
-        uses: actions/setup-go@v5
-        with:
-          go-version: 1.19
-
       - name: Check out source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: "1.19"
 
       - name: Test
         run: go test ./...
@@ -31,17 +39,18 @@ jobs:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.19
-        uses: actions/setup-go@v5
-        with:
-          go-version: 1.19
-
       - name: Check out source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: "1.19"
 
       - name: Search and notify
         run: go run ./cmd
         env:
+          SEND_TEST_EMAIL: ${{ inputs.send_test_email || false }}
           MAX_PRICE_MXN: ${{ vars.MAX_PRICE_MXN || '80000' }}
           SMTP_HOST: ${{ vars.SMTP_HOST || 'smtp.gmail.com' }}
           SMTP_PORT: ${{ vars.SMTP_PORT || '587' }}
